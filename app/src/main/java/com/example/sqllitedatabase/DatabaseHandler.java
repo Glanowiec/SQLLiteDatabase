@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     public static final int DB_VERSION = 1;
@@ -59,6 +62,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close(); //Closing database connection
     }
 
+    //Get contact by id
     public Contact getContact(int id){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_CONTACTS, new String[] {
@@ -72,6 +76,49 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 cursor.getString(1), cursor.getString(2));
 
         return contact;
+    }
+
+
+    //Get all contacts
+    public List<Contact> getAllContacts() {
+        List<Contact> contactList = new ArrayList<>();
+        //Query
+        String selectAllContactsQuery = "SELECT * FROM "
+                + TABLE_CONTACTS;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectAllContactsQuery, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                Contact contact = new Contact();
+                contact.setId(Integer.parseInt(cursor.getString(0)));
+                contact.setName(cursor.getString(1));
+                contact.setPhoneNumber(cursor.getString(2));
+                contactList.add(contact);
+            } while (cursor.moveToNext());
         }
+        return contactList;
+    }
+
+    //Update contact
+    public int updateContact(Contact contact){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_NAME, contact.getName());
+        contentValues.put(KEY_PHONE_NUMBER, contact.getPhoneNumber());
+
+        return db.update(TABLE_CONTACTS, contentValues, KEY_ID + " = ?",
+                new String[] { String.valueOf(contact.getId()) });
+    }
+
+    //Get amount of contacts
+    public int getContactsCount() {
+        String countQuery = "SELECT * FROM " + TABLE_CONTACTS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        cursor.close();
+
+        return cursor.getCount();
+    }
 }
 
