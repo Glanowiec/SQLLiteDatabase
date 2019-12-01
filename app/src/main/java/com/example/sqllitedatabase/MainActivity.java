@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         saveContactBtn.setOnClickListener(view -> saveContact());
 
         showContactListBtn = findViewById(R.id.showContactListButton);
+        showContactListBtn.setOnClickListener(view -> showSavedContacts());
 
         //On click - Open new webview with authors html info
         showAuthorsBtn = findViewById(R.id.showAuthorsBtn);
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Save contact to DB
     private void saveContact() {
         nameField = findViewById(R.id.nameField);
         phoneNumberField = findViewById(R.id.phoneNumberField);
@@ -71,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Opening activity with saved contacts
-
+    private void showSavedContacts() {
+    }
 
     //Opening activity with webview
     public void showAuthorInfo() {
