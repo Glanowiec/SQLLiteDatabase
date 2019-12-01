@@ -6,14 +6,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private EditText nameField;
+    private EditText phoneNumberField;
+
     private Button saveContactBtn;
     private Button showContactListBtn;
     private Button showAuthorsBtn;
+
+    private final String NOT_SAVED_MESSAGE = "Kontakt niezapisany. Uzupełnij wszystkie pola.";
+    private final String SAVED_MESSAGE = "Kontakt zapisany.";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         saveContactBtn = findViewById(R.id.saveContactButton);
+        saveContactBtn.setOnClickListener(view -> saveContact());
 
         showContactListBtn = findViewById(R.id.showContactListButton);
 
@@ -49,13 +58,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void saveContact() {
+        nameField = findViewById(R.id.nameField);
+        phoneNumberField = findViewById(R.id.phoneNumberField);
+        DatabaseHandler db = new DatabaseHandler(this);
+        if(!nameField.getText().toString().isEmpty() && !phoneNumberField.getText().toString().isEmpty()) {
+            db.addContact(new Contact(nameField.getText().toString(), phoneNumberField.getText().toString()));
+            showToast(SAVED_MESSAGE);
+        } else {
+            showToast(NOT_SAVED_MESSAGE);
+        }
+    }
+
     //Opening activity with saved contacts
-    
+
 
     //Opening activity with webview
     public void showAuthorInfo() {
         Intent activity2Intent = new Intent(this, Main2Activity.class);
         startActivity(activity2Intent);
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 }
