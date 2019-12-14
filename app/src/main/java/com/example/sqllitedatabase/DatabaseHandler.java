@@ -120,5 +120,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return cursor.getCount();
     }
+
+    public void deleteAllContacts() {
+        String deleteQuery = "DELETE FROM " + TABLE_CONTACTS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL(deleteQuery);
+        db.close();
+    }
 }
 

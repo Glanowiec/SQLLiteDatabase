@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button saveContactBtn;
     private Button showContactListBtn;
+    private Button deleteContactsBtn;
     private Button showAuthorsBtn;
 
     private final String NOT_SAVED_MESSAGE = "Kontakt niezapisany. Uzupełnij wszystkie pola.";
@@ -37,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
         //On click - Open new webview with authors html info
         showAuthorsBtn = findViewById(R.id.showAuthorsBtn);
         showAuthorsBtn.setOnClickListener(view -> showAuthorInfo());
+
+        //On click - delete all records from db
+        deleteContactsBtn = findViewById(R.id.deleteContactsButton);
+        deleteContactsBtn.setOnClickListener(view -> deleteContacts());
 
         DatabaseHandler db = new DatabaseHandler(this);
 
@@ -59,6 +64,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Delete all records from db
+    private void deleteContacts() {
+        DatabaseHandler db = new DatabaseHandler(this);
+        db.deleteAllContacts();
+    }
+
     //Save contact to DB
     private void saveContact() {
         nameField = findViewById(R.id.nameField);
@@ -74,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Opening activity with saved contacts
     private void showSavedContacts() {
+        Intent activity3Intent = new Intent(this, Main3Activity.class);
+        startActivity(activity3Intent);
     }
 
     //Opening activity with webview
